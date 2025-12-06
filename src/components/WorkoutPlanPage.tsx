@@ -13,8 +13,10 @@
  * - Back button returns to search results with scroll position preserved
  * 
  * Version: M2Fitness v16.4 (All Exercises → Full Detail Pages + No Coming Soon)
+ 
  */
-
+import MobileHeader from './MobileHeader';
+import MobileBottomNav from './MobileBottomNav';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
@@ -366,7 +368,10 @@ export default function WorkoutPlanPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+     <div className="min-h-screen bg-gray-50">
+      {/* Mobile Header (only on mobile) */}
+      <MobileHeader />
+
       {/* Overlay for mobile */}
       {sidebarOpen && (
         <div 
@@ -377,8 +382,8 @@ export default function WorkoutPlanPage() {
 
       {/* Sidebar - Collapsible */}
       <aside 
-        className={`fixed left-0 top-0 h-full w-64 bg-white border-r shadow-lg z-50 transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+         className={`fixed left-0 top-0 h-full w-64 bg-white border-r shadow-lg z-50 transition-transform duration-300 ease-in-out hidden md:block ${
+    sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="p-6">
@@ -428,18 +433,18 @@ export default function WorkoutPlanPage() {
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 p-4 md:p-8 ${sidebarOpen ? 'md:ml-64' : 'md:ml-0'}`}>
-        {/* Header with Hamburger Menu */}
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="h-12 w-12 border-2 hover:bg-blue-50 hover:border-blue-400 transition-all shadow-sm"
-            >
-              <Menu className="w-6 h-6" />
-            </Button>
+     <div className={`transition-all duration-300 p-4 md:p-8 pt-20 md:pt-8 ${sidebarOpen ? 'md:ml-64' : 'md:ml-0'}`}>
+  {/* Header with Hamburger Menu */}
+  <div className="mb-8">
+    <div className="flex items-center gap-4 mb-4">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="h-12 w-12 border-2 hover:bg-blue-50 hover:border-blue-400 transition-all shadow-sm md:hidden"
+      >
+        <Menu className="w-6 h-6" />
+      </Button>
             <div className="flex-1">
               <h1 className="text-3xl md:text-4xl mb-1" style={{ fontWeight: 700 }}>Workout Plans & Exercises</h1>
               <p className="text-base md:text-xl text-gray-600">Find the perfect workout or search for specific exercises</p>
@@ -782,6 +787,8 @@ export default function WorkoutPlanPage() {
           </Tabs>
         </div>
       </div>
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 }

@@ -8,6 +8,9 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import { workoutDatabase, getWorkoutsByLevel, type Workout } from '../utils/workoutDatabase';
 import heroImage from 'figma:asset/2187b0063c69775fee81df986b7fd4d50267f579.png';
 import indiaLandmarksBg from 'figma:asset/56785eb625af8e5f38f71ef958e29a95fff40533.png';
+import MobileHeader from './MobileHeader';
+import MobileBottomNav from './MobileBottomNav';
+
 
 export default function StateSelectionHomePage() {
   const navigate = useNavigate();
@@ -150,8 +153,12 @@ export default function StateSelectionHomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 🔹 Tier 1 — Navigation Bar */}
-      <nav className="sticky top-0 left-0 right-0 z-50 bg-white border-b shadow-sm">
+           {/* Mobile Header (only on phones) */}
+      <MobileHeader />
+
+      {/* 🔹 Tier 1 — Navigation Bar (desktop only) */}
+<nav className="sticky top-0 left-0 right-0 z-50 bg-white border-b shadow-sm hidden md:block">
+
         <div className="max-w-[1600px] mx-auto pl-4 pr-8 py-4">
           <div className="flex items-center justify-between gap-3">
             {/* Logo */}
@@ -912,6 +919,9 @@ export default function StateSelectionHomePage() {
           display: inline-block;
         }
       `}</style>
+      
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 }

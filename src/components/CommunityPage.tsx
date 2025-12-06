@@ -7,7 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Home, Dumbbell, TrendingUp, User, LogOut, Utensils, Users, Play, Heart, MessageCircle, Share2, Upload, Search, MapPin, Trophy, Filter, Plus, Clock } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
+import MobileHeader from './MobileHeader';
+import MobileBottomNav from './MobileBottomNav';
+import PageHeader from './PageHeader';
+
 
 interface Video {
   id: number;
@@ -247,8 +251,10 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+       {/* Mobile header */}
+      <MobileHeader />
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r shadow-sm z-50">
+      <aside className="hidden md:block fixed left-0 top-0 h-full w-64 bg-white border-r shadow-sm z-50">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-lg"></div>
@@ -294,9 +300,11 @@ export default function CommunityPage() {
           </nav>
         </div>
       </aside>
+      <PageHeader title="Community Feed" />
+
 
       {/* Main Content */}
-      <main className="ml-64 p-8">
+      <main className="pt-20 pb-24 md:ml-64 p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -559,11 +567,14 @@ export default function CommunityPage() {
       {/* Floating Action Button - Create Post */}
       <button
         onClick={() => navigate('/community/create-post')}
-        className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 rounded-full shadow-2xl hover:shadow-3xl flex items-center justify-center z-50 transition-all hover:scale-110"
+        className="fixed bottom-24 right-6 md:bottom-8 md:right-8w-16 h-16 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 rounded-full shadow-2xl hover:shadow-3xl flex items-center justify-center z-50 transition-all hover:scale-110"
         aria-label="Create Post"
       >
         <Plus className="w-8 h-8 text-white" strokeWidth={3} />
       </button>
+      <MobileBottomNav />
+
     </div>
+    
   );
 }

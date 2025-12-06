@@ -19,6 +19,8 @@
  * 
  * Version: M2Fitness v16.4 (All Exercises → Full Detail Pages + Linked Related Exercises, No ComingSoon)
  */
+import MobileHeader from './MobileHeader';
+import MobileBottomNav from './MobileBottomNav';
 
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
@@ -3178,10 +3180,10 @@ export default function WorkoutExerciseDetailPage() {
         </aside>
 
         {/* Main Content */}
-        <div className="ml-64 p-8">
-          <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" className="mb-6" onClick={() => navigate(-1)}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
+        <div className="pt-20 pb-24 px-4 md:px-8 md:pt-8 md:pb-10 md:ml-64">
+  <div className="max-w-4xl mx-auto">
+    <Button variant="ghost" className="mb-6" onClick={() => navigate(-1)}>
+      <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Results
             </Button>
 
@@ -3218,6 +3220,8 @@ export default function WorkoutExerciseDetailPage() {
             </Card>
           </div>
         </div>
+        {/* Mobile bottom navigation */}
+<MobileBottomNav />
       </div>
     );
   }
@@ -3262,6 +3266,9 @@ export default function WorkoutExerciseDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+       {/* ⭐ Mobile Header */}
+    <MobileHeader />
+
       {/* Animated Exercise Demo Modal */}
       {showAnimatedDemo && (
         <AnimatedExerciseDemo
@@ -3270,6 +3277,7 @@ export default function WorkoutExerciseDetailPage() {
           onClose={() => setShowAnimatedDemo(false)}
         />
       )}
+      
 
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r shadow-sm z-50">
@@ -3736,6 +3744,8 @@ export default function WorkoutExerciseDetailPage() {
           </Card>
         </div>
       </div>
+      {/* ⭐ Mobile bottom navigation */}
+    <MobileBottomNav />
     </div>
   );
 }
