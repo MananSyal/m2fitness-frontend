@@ -1,20 +1,20 @@
 /**
  * WorkoutPlanPage (OpenArea Flow)
- * 
+ *
  * This page implements the OpenArea exercise search and navigation system.
  * Users can:
  * 1. Search for exercises by name, category, equipment, or difficulty
  * 2. Filter exercises by muscle group (Chest, Back, Legs, Shoulders, Arms, Core, Cardio, Full Body)
  * 3. Click "View Details" on any exercise card to navigate to its dedicated WorkoutExerciseDetailPage
- * 
+ *
  * Navigation flow:
  * - OpenArea Search Results → /exercise/[exercise-slug] (full page navigation, no modal)
  * - Each exercise detail page includes breadcrumbs: Workouts › {Muscle} › {Exercise}
  * - Back button returns to search results with scroll position preserved
- * 
+ *
  * Version: M2Fitness v16.4 (All Exercises → Full Detail Pages + No Coming Soon)
- 
  */
+
 import MobileHeader from './MobileHeader';
 import MobileBottomNav from './MobileBottomNav';
 import { Link, useNavigate } from 'react-router-dom';
@@ -22,31 +22,30 @@ import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Input } from './ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Home, Dumbbell, TrendingUp, User, LogOut, Utensils, Search, Clock, Play, X, Zap, Menu, GitPullRequest, Repeat, Target } from 'lucide-react';
+import {
+  Home,
+  Dumbbell,
+  TrendingUp,
+  User,
+  LogOut,
+  Utensils,
+  Search,
+  Clock,
+  Play,
+  X,
+  Zap,
+  GitPullRequest,
+  Repeat,
+  Target,
+} from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { workoutDatabase, type Workout } from '../utils/workoutDatabase';
 
 export default function WorkoutPlanPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  // Default sidebar state: open on desktop, closed on mobile
-  const [sidebarOpen, setSidebarOpen] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
-
-  // Handle responsive sidebar on window resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setSidebarOpen(true);
-      } else {
-        setSidebarOpen(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   // Comprehensive exercise database
   const exercises = [
@@ -60,7 +59,7 @@ export default function WorkoutPlanPage() {
     { name: 'Cable Flyes', category: 'Chest', difficulty: 'Intermediate', equipment: 'Cable' },
     { name: 'Dips', category: 'Chest', difficulty: 'Advanced', equipment: 'Bodyweight' },
     { name: 'Dumbbell Flyes', category: 'Chest', difficulty: 'Beginner', equipment: 'Dumbbells' },
-    
+
     // Back
     { name: 'Deadlift', category: 'Back', difficulty: 'Advanced', equipment: 'Barbell' },
     { name: 'Pull-ups', category: 'Back', difficulty: 'Intermediate', equipment: 'Bodyweight' },
@@ -69,7 +68,7 @@ export default function WorkoutPlanPage() {
     { name: 'Seated Cable Row', category: 'Back', difficulty: 'Beginner', equipment: 'Cable' },
     { name: 'T-Bar Row', category: 'Back', difficulty: 'Intermediate', equipment: 'Barbell' },
     { name: 'Single-Arm Dumbbell Row', category: 'Back', difficulty: 'Beginner', equipment: 'Dumbbells' },
-    
+
     // Legs
     { name: 'Barbell Squat', category: 'Legs', difficulty: 'Intermediate', equipment: 'Barbell' },
     { name: 'Lunges', category: 'Legs', difficulty: 'Beginner', equipment: 'Bodyweight' },
@@ -79,7 +78,7 @@ export default function WorkoutPlanPage() {
     { name: 'Leg Extension', category: 'Legs', difficulty: 'Beginner', equipment: 'Machine' },
     { name: 'Bulgarian Split Squat', category: 'Legs', difficulty: 'Intermediate', equipment: 'Dumbbells' },
     { name: 'Calf Raises', category: 'Legs', difficulty: 'Beginner', equipment: 'Bodyweight' },
-    
+
     // Shoulders
     { name: 'Overhead Press', category: 'Shoulders', difficulty: 'Intermediate', equipment: 'Barbell' },
     { name: 'Lateral Raises', category: 'Shoulders', difficulty: 'Beginner', equipment: 'Dumbbells' },
@@ -87,7 +86,7 @@ export default function WorkoutPlanPage() {
     { name: 'Arnold Press', category: 'Shoulders', difficulty: 'Intermediate', equipment: 'Dumbbells' },
     { name: 'Face Pulls', category: 'Shoulders', difficulty: 'Beginner', equipment: 'Cable' },
     { name: 'Upright Row', category: 'Shoulders', difficulty: 'Intermediate', equipment: 'Barbell' },
-    
+
     // Arms
     { name: 'Bicep Curls', category: 'Arms', difficulty: 'Beginner', equipment: 'Dumbbells' },
     { name: 'Tricep Dips', category: 'Arms', difficulty: 'Intermediate', equipment: 'Bodyweight' },
@@ -96,7 +95,7 @@ export default function WorkoutPlanPage() {
     { name: 'Skull Crushers', category: 'Arms', difficulty: 'Intermediate', equipment: 'Barbell' },
     { name: 'Preacher Curls', category: 'Arms', difficulty: 'Intermediate', equipment: 'Dumbbells' },
     { name: 'Overhead Tricep Extension', category: 'Arms', difficulty: 'Beginner', equipment: 'Dumbbells' },
-    
+
     // Core
     { name: 'Plank', category: 'Core', difficulty: 'Beginner', equipment: 'Bodyweight' },
     { name: 'Crunches', category: 'Core', difficulty: 'Beginner', equipment: 'Bodyweight' },
@@ -105,7 +104,7 @@ export default function WorkoutPlanPage() {
     { name: 'Cable Crunches', category: 'Core', difficulty: 'Intermediate', equipment: 'Cable' },
     { name: 'Mountain Climbers', category: 'Core', difficulty: 'Intermediate', equipment: 'Bodyweight' },
     { name: 'Ab Wheel Rollout', category: 'Core', difficulty: 'Advanced', equipment: 'Ab Wheel' },
-    
+
     // Cardio
     { name: 'Running', category: 'Cardio', difficulty: 'Beginner', equipment: 'None' },
     { name: 'Jump Rope', category: 'Cardio', difficulty: 'Beginner', equipment: 'Jump Rope' },
@@ -113,7 +112,7 @@ export default function WorkoutPlanPage() {
     { name: 'Cycling', category: 'Cardio', difficulty: 'Beginner', equipment: 'Bike' },
     { name: 'Rowing', category: 'Cardio', difficulty: 'Intermediate', equipment: 'Rowing Machine' },
     { name: 'Battle Ropes', category: 'Cardio', difficulty: 'Advanced', equipment: 'Battle Ropes' },
-    
+
     // Full Body
     { name: 'Clean and Press', category: 'Full Body', difficulty: 'Advanced', equipment: 'Barbell' },
     { name: 'Kettlebell Swings', category: 'Full Body', difficulty: 'Intermediate', equipment: 'Kettlebell' },
@@ -127,19 +126,18 @@ export default function WorkoutPlanPage() {
   const filteredExercises = useMemo(() => {
     let filtered = exercises;
 
-    // Filter by category
     if (selectedCategory && selectedCategory !== 'All') {
-      filtered = filtered.filter(ex => ex.category === selectedCategory);
+      filtered = filtered.filter((ex) => ex.category === selectedCategory);
     }
 
-    // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(ex => 
-        ex.name.toLowerCase().includes(query) ||
-        ex.category.toLowerCase().includes(query) ||
-        ex.equipment.toLowerCase().includes(query) ||
-        ex.difficulty.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        (ex) =>
+          ex.name.toLowerCase().includes(query) ||
+          ex.category.toLowerCase().includes(query) ||
+          ex.equipment.toLowerCase().includes(query) ||
+          ex.difficulty.toLowerCase().includes(query),
       );
     }
 
@@ -148,25 +146,36 @@ export default function WorkoutPlanPage() {
 
   // Group workouts by level from the database
   const workouts = {
-    beginner: workoutDatabase.filter(w => w.level === 'beginner'),
-    intermediate: workoutDatabase.filter(w => w.level === 'intermediate'),
-    advanced: workoutDatabase.filter(w => w.level === 'advanced'),
+    beginner: workoutDatabase.filter((w) => w.level === 'beginner'),
+    intermediate: workoutDatabase.filter((w) => w.level === 'intermediate'),
+    advanced: workoutDatabase.filter((w) => w.level === 'advanced'),
   };
 
   const renderWorkoutCard = (workout: Workout) => (
-    <Card key={workout.id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300 border-2 hover:border-blue-400">
+    <Card
+      key={workout.id}
+      className="overflow-hidden hover:shadow-xl transition-shadow duration-300 border-2 hover:border-blue-400"
+    >
       <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-blue-100 via-purple-100 to-orange-100">
         <ImageWithFallback
-          src={workout.video || 'https://images.unsplash.com/photo-1733747660804-5a02541ba8dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXRuZXNzJTIwZXhlcmNpc2UlMjBneW0lMjB3b3Jrb3V0fGVufDF8fHx8MTc2MjAxNjczN3ww&ixlib=rb-4.1.0&q=80&w=1080'}
+          src={
+            workout.video ||
+            'https://images.unsplash.com/photo-1733747660804-5a02541ba8dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXRuZXNzJTIwZXhlcmNpc2UlMjBneW0lMjB3b3Jrb3V0fGVufDF8fHx8MTc2MjAxNjczN3ww&ixlib=rb-4.1.0&q=80&w=1080'
+          }
           alt={workout.name}
           className="w-full h-full object-cover"
         />
         <div className="absolute top-2 right-2">
-          <span className={`px-3 py-1 text-white text-sm rounded-full backdrop-blur-sm ${
-            workout.level === 'beginner' ? 'bg-blue-500' :
-            workout.level === 'intermediate' ? 'bg-purple-500' :
-            'bg-orange-500'
-          }`} style={{ fontWeight: 600 }}>
+          <span
+            className={`px-3 py-1 text-white text-sm rounded-full backdrop-blur-sm ${
+              workout.level === 'beginner'
+                ? 'bg-blue-500'
+                : workout.level === 'intermediate'
+                ? 'bg-purple-500'
+                : 'bg-orange-500'
+            }`}
+            style={{ fontWeight: 600 }}
+          >
             {workout.level.charAt(0).toUpperCase() + workout.level.slice(1)}
           </span>
         </div>
@@ -177,7 +186,9 @@ export default function WorkoutPlanPage() {
         </div>
       </div>
       <CardContent className="p-6">
-        <h3 className="mb-2" style={{ fontWeight: 700 }}>{workout.name}</h3>
+        <h3 className="mb-2" style={{ fontWeight: 700 }}>
+          {workout.name}
+        </h3>
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">{workout.description}</p>
         <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
           <span className="flex items-center gap-1">
@@ -201,28 +212,31 @@ export default function WorkoutPlanPage() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Beginner': return 'bg-green-100 text-green-700 border-green-200';
-      case 'Intermediate': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'Advanced': return 'bg-orange-100 text-orange-700 border-orange-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'Beginner':
+        return 'bg-green-100 text-green-700 border-green-200';
+      case 'Intermediate':
+        return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'Advanced':
+        return 'bg-orange-100 text-orange-700 border-orange-200';
+      default:
+        return 'bg-gray-100 text-gray-700 border-gray-200';
     }
   };
 
-  // Convert exercise name to slug for navigation
+  // name→slug mapping for detail pages
   const getExerciseSlug = (exerciseName: string): string => {
-    // Map exercise names to existing slugs in WorkoutExerciseDetailPage
     const nameToSlug: { [key: string]: string } = {
-      // Core 7 exercises
+      // Core 7
       'barbell squat': 'barbell-squat',
       'bench press': 'bench-press',
-      'deadlift': 'deadlift',
+      deadlift: 'deadlift',
       'overhead press': 'overhead-press',
       'bent-over row': 'barbell-row',
       'barbell row': 'barbell-row',
       'pull-ups': 'pull-up',
       'pull up': 'pull-up',
-      'lunges': 'lunge',
-      
+      lunges: 'lunge',
+
       // Chest
       'incline bench press': 'incline-bench-press',
       'dumbbell chest press': 'dumbbell-chest-press',
@@ -235,14 +249,14 @@ export default function WorkoutPlanPage() {
       'cable fly': 'cable-flyes',
       'dumbbell flyes': 'dumbbell-flyes',
       'dumbbell fly': 'dumbbell-flyes',
-      'dips': 'dips',
-      
+      dips: 'dips',
+
       // Back
       'lat pulldown': 'lat-pulldown',
       'seated cable row': 'seated-cable-row',
       't-bar row': 't-bar-row',
       'single-arm dumbbell row': 'single-arm-dumbbell-row',
-      
+
       // Legs
       'leg press': 'leg-press',
       'romanian deadlift': 'romanian-deadlift',
@@ -251,7 +265,7 @@ export default function WorkoutPlanPage() {
       'bulgarian split squat': 'bulgarian-split-squat',
       'calf raises': 'calf-raises',
       'calf raise': 'calf-raises',
-      
+
       // Shoulders
       'lateral raises': 'lateral-raises',
       'lateral raise': 'lateral-raises',
@@ -261,7 +275,7 @@ export default function WorkoutPlanPage() {
       'face pulls': 'face-pulls',
       'face pull': 'face-pulls',
       'upright row': 'upright-row',
-      
+
       // Arms
       'bicep curls': 'bicep-curls',
       'bicep curl': 'bicep-curls',
@@ -274,10 +288,10 @@ export default function WorkoutPlanPage() {
       'skull crusher': 'skull-crushers',
       'tricep dips': 'dips',
       'overhead tricep extension': 'overhead-tricep-extension',
-      
-      // Core (now have full pages!)
-      'plank': 'plank',
-      'crunches': 'crunches',
+
+      // Core
+      plank: 'plank',
+      crunches: 'crunches',
       'russian twists': 'russian-twists',
       'russian twist': 'russian-twists',
       'hanging leg raises': 'hanging-leg-raises',
@@ -288,24 +302,24 @@ export default function WorkoutPlanPage() {
       'mountain climber': 'mountain-climbers',
       'ab wheel rollout': 'ab-wheel-rollout',
       'ab wheel': 'ab-wheel-rollout',
-      
+
       // Cardio
-      'burpees': 'burpees',
-      'burpee': 'burpees',
-      'running': 'burpees', // Full body cardio
+      burpees: 'burpees',
+      burpee: 'burpees',
+      running: 'burpees',
       'jump rope': 'burpees',
-      'cycling': 'leg-press', // Leg-dominant
-      'rowing': 'seated-cable-row', // Similar pulling motion
-      'battle ropes': 'mountain-climbers', // Similar intensity
-      
+      cycling: 'leg-press',
+      rowing: 'seated-cable-row',
+      'battle ropes': 'mountain-climbers',
+
       // Full Body
       'clean and press': 'overhead-press',
       'kettlebell swings': 'kettlebell-swings',
       'kettlebell swing': 'kettlebell-swings',
-      'thrusters': 'overhead-press',
+      thrusters: 'overhead-press',
       'medicine ball slams': 'overhead-press',
-      
-      // Additional Previously Missing Exercises
+
+      // Extras
       'pendlay row': 'pendlay-row',
       'chin-up': 'chin-up',
       'chin up': 'chin-up',
@@ -318,46 +332,79 @@ export default function WorkoutPlanPage() {
     };
 
     const lowerName = exerciseName.toLowerCase();
-    
-    // Check if we have a direct mapping
-    if (nameToSlug[lowerName]) {
-      return nameToSlug[lowerName];
-    }
+    if (nameToSlug[lowerName]) return nameToSlug[lowerName];
 
-    // Check if the name contains a known exercise
     for (const [key, value] of Object.entries(nameToSlug)) {
-      if (lowerName.includes(key)) {
-        return value;
-      }
+      if (lowerName.includes(key)) return value;
     }
 
-    // Default: create a slug from the name
     return exerciseName
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
   };
 
-  // Check if exercise has a full detail page
   const hasFullDetailPage = (exerciseName: string): boolean => {
     const slug = getExerciseSlug(exerciseName);
     const fullDetailPages = [
       // Core 7
-      'barbell-squat', 'bench-press', 'deadlift', 'overhead-press', 'barbell-row', 'pull-up', 'lunge',
+      'barbell-squat',
+      'bench-press',
+      'deadlift',
+      'overhead-press',
+      'barbell-row',
+      'pull-up',
+      'lunge',
       // Chest
-      'push-up', 'incline-bench-press', 'dumbbell-chest-press', 'incline-dumbbell-press', 'cable-chest-fly', 'cable-flyes', 'dumbbell-flyes', 'dips',
+      'push-up',
+      'incline-bench-press',
+      'dumbbell-chest-press',
+      'incline-dumbbell-press',
+      'cable-chest-fly',
+      'cable-flyes',
+      'dumbbell-flyes',
+      'dips',
       // Back
-      'lat-pulldown', 'seated-cable-row', 't-bar-row', 'single-arm-dumbbell-row', 'pendlay-row', 'chin-up', 'assisted-pull-up',
+      'lat-pulldown',
+      'seated-cable-row',
+      't-bar-row',
+      'single-arm-dumbbell-row',
+      'pendlay-row',
+      'chin-up',
+      'assisted-pull-up',
       // Legs
-      'leg-press', 'romanian-deadlift', 'leg-curl', 'leg-extension', 'bulgarian-split-squat', 'calf-raises', 'reverse-lunge', 'step-ups',
+      'leg-press',
+      'romanian-deadlift',
+      'leg-curl',
+      'leg-extension',
+      'bulgarian-split-squat',
+      'calf-raises',
+      'reverse-lunge',
+      'step-ups',
       // Shoulders
-      'lateral-raises', 'front-raises', 'arnold-press', 'face-pulls', 'upright-row',
+      'lateral-raises',
+      'front-raises',
+      'arnold-press',
+      'face-pulls',
+      'upright-row',
       // Arms
-      'bicep-curls', 'hammer-curls', 'preacher-curls', 'tricep-pushdown', 'skull-crushers', 'overhead-tricep-extension',
+      'bicep-curls',
+      'hammer-curls',
+      'preacher-curls',
+      'tricep-pushdown',
+      'skull-crushers',
+      'overhead-tricep-extension',
       // Core
-      'plank', 'crunches', 'russian-twists', 'hanging-leg-raises', 'mountain-climbers', 'cable-crunches', 'ab-wheel-rollout',
-      // Cardio/Full Body
-      'burpees', 'kettlebell-swings'
+      'plank',
+      'crunches',
+      'russian-twists',
+      'hanging-leg-raises',
+      'mountain-climbers',
+      'cable-crunches',
+      'ab-wheel-rollout',
+      // Cardio / Full body
+      'burpees',
+      'kettlebell-swings',
     ];
     return fullDetailPages.includes(slug);
   };
@@ -368,28 +415,18 @@ export default function WorkoutPlanPage() {
   };
 
   return (
-     <div className="min-h-screen bg-gray-50">
-      {/* Mobile Header (only on mobile) */}
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile header at top */}
       <MobileHeader />
 
-      {/* Overlay for mobile */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
-
-      {/* Sidebar - Collapsible */}
-      <aside 
-         className={`fixed left-0 top-0 h-full w-64 bg-white border-r shadow-lg z-50 transition-transform duration-300 ease-in-out hidden md:block ${
-    sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
+      {/* Desktop sidebar */}
+      <aside className="hidden md:block fixed left-0 top-0 h-full w-64 bg-white border-r shadow-lg z-50">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-lg"></div>
-            <span className="text-xl" style={{ fontWeight: 700 }}>M2Fitness</span>
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-lg" />
+            <span className="text-xl" style={{ fontWeight: 700 }}>
+              M2Fitness
+            </span>
           </div>
           <nav className="space-y-2">
             <Link to="/dashboard">
@@ -423,7 +460,10 @@ export default function WorkoutPlanPage() {
               </Button>
             </Link>
             <Link to="/">
-              <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
                 <LogOut className="w-5 h-5 mr-3" />
                 Logout
               </Button>
@@ -432,44 +472,46 @@ export default function WorkoutPlanPage() {
         </div>
       </aside>
 
-      {/* Main Content */}
-     <div className={`transition-all duration-300 p-4 md:p-8 pt-20 md:pt-8 ${sidebarOpen ? 'md:ml-64' : 'md:ml-0'}`}>
-  {/* Header with Hamburger Menu */}
-  <div className="mb-8">
-    <div className="flex items-center gap-4 mb-4">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="h-12 w-12 border-2 hover:bg-blue-50 hover:border-blue-400 transition-all shadow-sm md:hidden"
-      >
-        <Menu className="w-6 h-6" />
-      </Button>
+      {/* Main content */}
+      <main className="p-4 md:p-8 md:ml-64 pb-20">
+        {/* Desktop header */}
+        <div className="mb-8 hidden md:block">
+          <div className="flex items-center gap-4 mb-4">
             <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl mb-1" style={{ fontWeight: 700 }}>Workout Plans & Exercises</h1>
-              <p className="text-base md:text-xl text-gray-600">Find the perfect workout or search for specific exercises</p>
+              <h1 className="text-4xl mb-1" style={{ fontWeight: 700 }}>
+                Workout Plans & Exercises
+              </h1>
+              <p className="text-xl text-gray-600">
+                Find the perfect workout or search for specific exercises
+              </p>
             </div>
             <Link to="/">
-              <Button variant="outline" className="hidden md:flex items-center gap-2 border-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-orange-50 hover:border-blue-400 transition-all">
+              <Button
+                variant="outline"
+                className="hidden md:flex items-center gap-2 border-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-orange-50 hover:border-blue-400 transition-all"
+              >
                 <Home className="w-5 h-5" />
                 <span style={{ fontWeight: 600 }}>Home</span>
               </Button>
             </Link>
           </div>
-          
-          {/* Mobile Home Button */}
-          <Link to="/" className="md:hidden block mb-4">
-            <Button variant="outline" className="w-full flex items-center justify-center gap-2 border-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-orange-50 hover:border-blue-400 transition-all">
-              <Home className="w-5 h-5" />
-              <span style={{ fontWeight: 600 }}>Back to Home</span>
-            </Button>
-          </Link>
         </div>
-        {/* Enhanced Search Section */}
+
+        {/* Mobile back button */}
+        <Link to="/" className="md:hidden block mb-4">
+          <Button
+            variant="outline"
+            className="w-full flex items-center justify-center gap-2 border-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-orange-50 hover:border-blue-400 transition-all"
+          >
+            <Home className="w-5 h-5" />
+            <span style={{ fontWeight: 600 }}>Back to Home</span>
+          </Button>
+        </Link>
+
+        {/* Search card */}
         <Card className="mb-8 bg-gradient-to-br from-blue-50 to-orange-50 border-2">
           <CardContent className="p-6">
             <div className="space-y-4">
-              {/* Search Bar */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
@@ -488,7 +530,6 @@ export default function WorkoutPlanPage() {
                 )}
               </div>
 
-              {/* Category Filter Pills */}
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <button
@@ -499,7 +540,11 @@ export default function WorkoutPlanPage() {
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
                         : 'bg-white text-gray-700 hover:bg-gray-100 border hover:border-blue-300'
                     }`}
-                    style={(category === 'All' && !selectedCategory) || selectedCategory === category ? { fontWeight: 600 } : {}}
+                    style={
+                      (category === 'All' && !selectedCategory) || selectedCategory === category
+                        ? { fontWeight: 600 }
+                        : {}
+                    }
                   >
                     {category}
                   </button>
@@ -509,7 +554,7 @@ export default function WorkoutPlanPage() {
           </CardContent>
         </Card>
 
-        {/* Search Results - OpenArea */}
+        {/* Search results */}
         {searchQuery || selectedCategory ? (
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
@@ -529,8 +574,8 @@ export default function WorkoutPlanPage() {
             {filteredExercises.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredExercises.map((exercise, index) => (
-                  <Card 
-                    key={index} 
+                  <Card
+                    key={index}
                     className="hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer group border-2 hover:border-blue-400"
                     onClick={() => handleViewExercise(exercise.name)}
                   >
@@ -538,9 +583,17 @@ export default function WorkoutPlanPage() {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="group-hover:text-blue-600 transition-colors" style={{ fontWeight: 600 }}>{exercise.name}</h3>
+                            <h3
+                              className="group-hover:text-blue-600 transition-colors"
+                              style={{ fontWeight: 600 }}
+                            >
+                              {exercise.name}
+                            </h3>
                             {hasFullDetailPage(exercise.name) && (
-                              <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded" style={{ fontWeight: 600 }}>
+                              <span
+                                className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded"
+                                style={{ fontWeight: 600 }}
+                              >
                                 Full Guide
                               </span>
                             )}
@@ -552,14 +605,18 @@ export default function WorkoutPlanPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 mb-3">
-                        <span className={`px-2 py-1 rounded-full text-xs border ${getDifficultyColor(exercise.difficulty)}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs border ${getDifficultyColor(
+                            exercise.difficulty,
+                          )}`}
+                        >
                           {exercise.difficulty}
                         </span>
                         <span className="text-xs text-gray-500">{exercise.equipment}</span>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="w-full bg-white group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:border-blue-300 transition-colors"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -576,11 +633,17 @@ export default function WorkoutPlanPage() {
               <Card>
                 <CardContent className="p-12 text-center">
                   <Search className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                  <h3 className="text-xl mb-2" style={{ fontWeight: 600 }}>No exercises found</h3>
-                  <p className="text-gray-600 mb-4">
-                    Try adjusting your search or filter criteria
-                  </p>
-                  <Button onClick={() => { setSearchQuery(''); setSelectedCategory(null); }} variant="outline">
+                  <h3 className="text-xl mb-2" style={{ fontWeight: 600 }}>
+                    No exercises found
+                  </h3>
+                  <p className="text-gray-600 mb-4">Try adjusting your search or filter criteria</p>
+                  <Button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedCategory(null);
+                    }}
+                    variant="outline"
+                  >
                     Clear Search
                   </Button>
                 </CardContent>
@@ -589,55 +652,84 @@ export default function WorkoutPlanPage() {
           </div>
         ) : null}
 
-        {/* Workout Splits Section */}
+        {/* Workout splits */}
         {!searchQuery && !selectedCategory && (
           <div className="mb-12">
             <div className="mb-8 text-center">
-              <h2 className="text-4xl mb-3" style={{ fontWeight: 700 }}>Choose Your Training Split</h2>
-              <p className="text-xl text-gray-600">Select a workout split that fits your schedule and goals</p>
+              <h2 className="text-4xl mb-3" style={{ fontWeight: 700 }}>
+                Choose Your Training Split
+              </h2>
+              <p className="text-xl text-gray-600">
+                Select a workout split that fits your schedule and goals
+              </p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               {/* Push-Pull Split */}
-              <Card 
+              <Card
                 className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 hover:border-blue-500 group cursor-pointer"
                 onClick={() => navigate('/workouts/push-pull-split')}
               >
                 <div className="relative h-56 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center overflow-hidden">
                   <GitPullRequest className="w-24 h-24 text-white/90 group-hover:scale-110 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span className="text-white text-sm" style={{ fontWeight: 600 }}>POPULAR</span>
+                    <span className="text-white text-sm" style={{ fontWeight: 600 }}>
+                      POPULAR
+                    </span>
                   </div>
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-2xl mb-3 group-hover:text-blue-600 transition-colors" style={{ fontWeight: 700 }}>
+                  <h3
+                    className="text-2xl mb-3 group-hover:text-blue-600 transition-colors"
+                    style={{ fontWeight: 700 }}
+                  >
                     Push-Pull Split
                   </h3>
                   <p className="text-gray-700 mb-4" style={{ fontWeight: 500 }}>
                     Train complementary upper body movements for balanced strength and growth.
                   </p>
-                  
+
                   <div className="mb-4">
                     <div className="mb-3">
-                      <span className="text-sm text-blue-600 uppercase tracking-wide" style={{ fontWeight: 700 }}>Push Exercises:</span>
-                      <p className="text-sm text-gray-600 mt-1">Bench Press, Overhead Press, Dips, Tricep Extensions</p>
+                      <span
+                        className="text-sm text-blue-600 uppercase tracking-wide"
+                        style={{ fontWeight: 700 }}
+                      >
+                        Push Exercises:
+                      </span>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Bench Press, Overhead Press, Dips, Tricep Extensions
+                      </p>
                     </div>
                     <div>
-                      <span className="text-sm text-purple-600 uppercase tracking-wide" style={{ fontWeight: 700 }}>Pull Exercises:</span>
-                      <p className="text-sm text-gray-600 mt-1">Pull-Ups, Rows, Deadlifts, Bicep Curls</p>
+                      <span
+                        className="text-sm text-purple-600 uppercase tracking-wide"
+                        style={{ fontWeight: 700 }}
+                      >
+                        Pull Exercises:
+                      </span>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Pull-Ups, Rows, Deadlifts, Bicep Curls
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm" style={{ fontWeight: 600 }}>
+                    <span
+                      className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm"
+                      style={{ fontWeight: 600 }}
+                    >
                       4-6 Days/Week
                     </span>
-                    <span className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-sm" style={{ fontWeight: 600 }}>
+                    <span
+                      className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-sm"
+                      style={{ fontWeight: 600 }}
+                    >
                       Intermediate
                     </span>
                   </div>
-                  <Button 
+                  <Button
                     className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -650,45 +742,68 @@ export default function WorkoutPlanPage() {
               </Card>
 
               {/* Double Muscle Split */}
-              <Card 
+              <Card
                 className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 hover:border-orange-500 group cursor-pointer"
                 onClick={() => navigate('/workouts/double-muscle-split')}
               >
                 <div className="relative h-56 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 flex items-center justify-center overflow-hidden">
                   <Repeat className="w-24 h-24 text-white/90 group-hover:scale-110 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span className="text-white text-sm" style={{ fontWeight: 600 }}>EFFICIENT</span>
+                    <span className="text-white text-sm" style={{ fontWeight: 600 }}>
+                      EFFICIENT
+                    </span>
                   </div>
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-2xl mb-3 group-hover:text-orange-600 transition-colors" style={{ fontWeight: 700 }}>
+                  <h3
+                    className="text-2xl mb-3 group-hover:text-orange-600 transition-colors"
+                    style={{ fontWeight: 700 }}
+                  >
                     Double Muscle Split
                   </h3>
                   <p className="text-gray-700 mb-4" style={{ fontWeight: 500 }}>
                     Efficient sessions combining two related muscle groups for maximum activation.
                   </p>
-                  
+
                   <div className="mb-4">
                     <div className="mb-3">
-                      <span className="text-sm text-orange-600 uppercase tracking-wide" style={{ fontWeight: 700 }}>Example Pairings:</span>
+                      <span
+                        className="text-sm text-orange-600 uppercase tracking-wide"
+                        style={{ fontWeight: 700 }}
+                      >
+                        Example Pairings:
+                      </span>
                       <p className="text-sm text-gray-600 mt-1">Chest + Triceps, Back + Biceps</p>
                     </div>
                     <div>
-                      <span className="text-sm text-red-600 uppercase tracking-wide" style={{ fontWeight: 700 }}>Sample Day:</span>
-                      <p className="text-sm text-gray-600 mt-1">Bench Press, Flyes, Dips, Tricep Pushdowns</p>
+                      <span
+                        className="text-sm text-red-600 uppercase tracking-wide"
+                        style={{ fontWeight: 700 }}
+                      >
+                        Sample Day:
+                      </span>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Bench Press, Flyes, Dips, Tricep Pushdowns
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-full text-sm" style={{ fontWeight: 600 }}>
+                    <span
+                      className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-full text-sm"
+                      style={{ fontWeight: 600 }}
+                    >
                       3-5 Days/Week
                     </span>
-                    <span className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-sm" style={{ fontWeight: 600 }}>
+                    <span
+                      className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-sm"
+                      style={{ fontWeight: 600 }}
+                    >
                       Beginner-Int
                     </span>
                   </div>
-                  <Button 
+                  <Button
                     className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 shadow-lg hover:shadow-xl transition-all"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -701,45 +816,68 @@ export default function WorkoutPlanPage() {
               </Card>
 
               {/* Single Muscle Split */}
-              <Card 
+              <Card
                 className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 hover:border-green-500 group cursor-pointer"
                 onClick={() => navigate('/workouts/single-muscle-split')}
               >
                 <div className="relative h-56 bg-gradient-to-br from-green-500 via-green-600 to-teal-600 flex items-center justify-center overflow-hidden">
                   <Target className="w-24 h-24 text-white/90 group-hover:scale-110 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span className="text-white text-sm" style={{ fontWeight: 600 }}>INTENSE</span>
+                    <span className="text-white text-sm" style={{ fontWeight: 600 }}>
+                      INTENSE
+                    </span>
                   </div>
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-2xl mb-3 group-hover:text-green-600 transition-colors" style={{ fontWeight: 700 }}>
+                  <h3
+                    className="text-2xl mb-3 group-hover:text-green-600 transition-colors"
+                    style={{ fontWeight: 700 }}
+                  >
                     Single Muscle Split
                   </h3>
                   <p className="text-gray-700 mb-4" style={{ fontWeight: 500 }}>
                     Isolated workouts for detailed muscle definition and recovery optimization.
                   </p>
-                  
+
                   <div className="mb-4">
                     <div className="mb-3">
-                      <span className="text-sm text-green-600 uppercase tracking-wide" style={{ fontWeight: 700 }}>Weekly Schedule:</span>
+                      <span
+                        className="text-sm text-green-600 uppercase tracking-wide"
+                        style={{ fontWeight: 700 }}
+                      >
+                        Weekly Schedule:
+                      </span>
                       <p className="text-sm text-gray-600 mt-1">Chest Day, Leg Day, Arm Day, etc.</p>
                     </div>
                     <div>
-                      <span className="text-sm text-teal-600 uppercase tracking-wide" style={{ fontWeight: 700 }}>Chest Day Example:</span>
-                      <p className="text-sm text-gray-600 mt-1">5+ exercises focusing solely on chest muscles</p>
+                      <span
+                        className="text-sm text-teal-600 uppercase tracking-wide"
+                        style={{ fontWeight: 700 }}
+                      >
+                        Chest Day Example:
+                      </span>
+                      <p className="text-sm text-gray-600 mt-1">
+                        5+ exercises focusing solely on chest muscles
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm" style={{ fontWeight: 600 }}>
+                    <span
+                      className="px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm"
+                      style={{ fontWeight: 600 }}
+                    >
                       5-6 Days/Week
                     </span>
-                    <span className="px-3 py-1.5 bg-teal-100 text-teal-700 rounded-full text-sm" style={{ fontWeight: 600 }}>
+                    <span
+                      className="px-3 py-1.5 bg-teal-100 text-teal-700 rounded-full text-sm"
+                      style={{ fontWeight: 600 }}
+                    >
                       Advanced
                     </span>
                   </div>
-                  <Button 
+                  <Button
                     className="w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -754,7 +892,7 @@ export default function WorkoutPlanPage() {
           </div>
         )}
 
-        {/* Workout Plans Section */}
+        {/* Workout plans tabs */}
         <div>
           <h2 className="text-2xl mb-6" style={{ fontWeight: 700 }}>
             {searchQuery || selectedCategory ? 'Featured Workout Plans' : 'Workout Plans'}
@@ -786,8 +924,9 @@ export default function WorkoutPlanPage() {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
-      {/* Mobile Bottom Navigation */}
+      </main>
+
+      {/* Mobile bottom navigation */}
       <MobileBottomNav />
     </div>
   );
